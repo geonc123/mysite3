@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+
+	<select id="selectList" parameterType="map" resultType="com.javaex.vo.BoardVo"> 
+  <![CDATA[ select   B.rnum as rnum ,
+         B.no as no, 
+         B.title as title,  
+         B.content as content, 
+         B.hit as hit , 
+         B.reg_date as reg_date , 
+         B.user_no as user_no, 
+         B.name as name
+from(
+    select  rownum as rnum, 
+            A.no as no , 
+            A.title as title, 
+            A.content as content ,
+            A.hit as hit, 
+            A.reg_date as reg_date , 
+            A.user_no as user_no , 
+            A.name as name
+    from (
+            select	
+            		 g.no as no,
+                     g.title as title, 
+                     g.content as content, 
+                     g.hit as hit, 
+                     g.reg_date as reg_date, 
+                     g.user_no as user_no , 
+                     u.name as name 
+           from users u join geustbook g 
+            on u.no=g.user_no 
+ 		 	order by g.no desc ) A
+    where rownum <=#{pageno2} ) B
+where B.rnum >= #{pageno1}
+	 ]]>
+
+	</select>
+
+	<delete id="delete" parameterType="int">
+	<![CDATA[
+	delete from geustbook where no=#{no}
+	]]>
+	</delete>
+
+
+	<select id="getVo" parameterType="int" resultType="com.javaex.vo.BoardVo">  
+	 <![CDATA[
+	 select title, 
+	 		content, 
+	 		user_no ,
+	 		no
+	 		from geustbook 
+	 		where no = #{no}
+	   ]]>
+	</select>
+
+	<update id="modify" parameterType="com.javaex.vo.BoardVo"> 	
+ <![CDATA[
+	update geustbook set content = #{content} , title = #{title}  where no=#{no} and user_no=#{user_no}
+	  ]]>
+	</update>
+
+	<insert id="insert" parameterType="com.javaex.vo.BoardVo">
+	 <![CDATA[
+	insert into geustbook values ( SEQ_GEUST_NO.nextval,#{title},#{content},1, to_char(sysdate,'yyyy/mm/dd hh24:mi:ss') , #{user_no} )
+	   ]]>
+	</insert>
+
+	<update id="uphit" parameterType="int">
+	  <![CDATA[
+	 update geustbook set hit= hit+1 where no=#{no}
+	   ]]>
+	</update>
+
+
+	<select id="count" resultType="int">
+ 		<![CDATA[	
+ 		select count(*) as count from geustbook 
+ 		]]>
+	</select>
+	
+	
+	<select id="serch">
+	
+	
+SELECT FIRST_NAME, EMAIL, PHONE_NUMBER, HIRE_DATE 
+		 FROM EMPLOYEES 
+         WHERE FIRST_NAME LIKE ? OR LAST_NAME LIKE ? 
+
+
+
+	</select>
+
+</mapper>
