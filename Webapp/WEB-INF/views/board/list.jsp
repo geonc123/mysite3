@@ -30,20 +30,20 @@
 			<div id="c_box">
 				<div id="board">
 					<h2>게시판-리스트</h2>
-					<form action="" method="post">
-						<input type="text" id="kwd" name="kwd" value=""> <input type="submit" value="찾기">
+					<form action="${pageContext.request.contextPath}/board/search" method="post">
+						<input type="text" id="kwd" name="searchKwd" value=""> <input type="submit" value="찾기">
 					</form>
 
 					<table class="tbl-ex">
 						<tr>
-							<th>번호 ${maxPage }</th>
+							<th>번호</th>
 							<th>제목</th>
 							<th>글쓴이</th>
 							<th>조회수</th>
 							<th>작성일</th>
 							<th>&nbsp;</th>
 						</tr>
-						<c:forEach items="${geustList}" var="vo" varStatus="status">
+						<c:forEach items="${guestList}" var="vo" varStatus="status">
 							<tr>
 								<td>${vo.no }</td>
 								<td><a href="${pageContext.request.contextPath}/board/read/${vo.no}">${vo.title}</a></td>

@@ -12,17 +12,17 @@
          B.reg_date as reg_date , 
          B.user_no as user_no, 
          B.name as name
-from(
-    select  rownum as rnum, 
-            A.no as no , 
-            A.title as title, 
-            A.content as content ,
-            A.hit as hit, 
-            A.reg_date as reg_date , 
-            A.user_no as user_no , 
-            A.name as name
-    from (
-            select	
+	from(
+    	select  rownum as rnum, 
+      	  	    A.no as no , 
+      	  	    A.title as title, 
+     	        A.content as content ,
+     	        A.hit as hit, 
+    	        A.reg_date as reg_date , 
+       		    A.user_no as user_no , 
+      	    	A.name as name
+    	from (
+    	        select	
             		 g.no as no,
                      g.title as title, 
                      g.content as content, 
@@ -33,8 +33,8 @@ from(
            from users u join geustbook g 
             on u.no=g.user_no 
  		 	order by g.no desc ) A
-    where rownum <=#{pageno2} ) B
-where B.rnum >= #{pageno1}
+   	  where rownum <=#{pageno2} ) B
+	where B.rnum >= #{pageno1}
 	 ]]>
 
 	</select>
@@ -81,17 +81,26 @@ where B.rnum >= #{pageno1}
  		select count(*) as count from geustbook 
  		]]>
 	</select>
+
+
+	<select id="search" parameterType="String" resultType="com.javaex.vo.BoardVo">
+	<![CDATA[	
 	
-	
-	<select id="serch">
-	
-	
-SELECT FIRST_NAME, EMAIL, PHONE_NUMBER, HIRE_DATE 
-		 FROM EMPLOYEES 
-         WHERE FIRST_NAME LIKE ? OR LAST_NAME LIKE ? 
+	SELECT  g.no as no, 
+    	    g.title as title, 
+        	g.content as content, 
+        	g.hit as hit, 
+   		    g.reg_date as reg_date, 
+   		    g.user_no as user_no, 
+   	    	u.name as name
+	FROM geustbook g join users u
+	on u.no = g.user_no
+	WHERE name LIKE #{searchKwd} or title LIKE #{searchKwd}
 
 
 
+
+]]>
 	</select>
 
 </mapper>

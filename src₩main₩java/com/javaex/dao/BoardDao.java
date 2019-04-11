@@ -67,7 +67,7 @@ public class BoardDao {
 	public int insertDemo() {
 		int count = 0 ;
 		BoardVo vo = new BoardVo();
-		for(int i =0 ; i<1000 ; i++) {
+		for(int i =0 ; i<10000 ; i++) {
 			vo.setUser_no(5);
 			vo.setTitle(i+"번째 타이틀");
 			vo.setContent(i+"번째 컨텐트 ");
@@ -78,5 +78,10 @@ public class BoardDao {
 		 System.out.println("insert complete");
 		 return count;
 		}
+	
+	public List<BoardVo> search(String searchKwd) {
+		List<BoardVo> list = sqlsession.selectList("board.search",searchKwd);
+		return list;
+	}
 	 
 }

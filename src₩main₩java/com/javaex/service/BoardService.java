@@ -1,6 +1,8 @@
 package com.javaex.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,23 @@ public class BoardService {
 	@Autowired
 	private BoardDao dao;
 
-	public List<BoardVo> getList(int pageno1,int pageno2) {
+	public Map<String, Object> getList(int pageno) {
+		int listSize = 1000;
+		int pageno1 = 1+listSize*(pageno-1);
+		int pageno2 = listSize*pageno;
+		int countPage = dao.count();
+		int maxPage = (int)Math.ceil((double)countPage/listSize);
 		List<BoardVo> list = dao.getList(pageno1, pageno2);
-
+		Map<String, Object> map = new HashMap<String , Object>();
+		map.put("maxPage", maxPage);
+		map.put("list", list);
+		
+		return map;
+	}
+	
+	public List<BoardVo> searchList(String searchKwd){
+		String searchKwd1 = "%"+searchKwd+"%";
+		List<BoardVo> list = dao.search(searchKwd1);
 		return list;
 	}
 
@@ -49,10 +65,6 @@ public class BoardService {
 		return count;
 	}
 	
-	public int countPage() {
-		int count = dao.count();
-		return count;
-	}
 	
 	public int insertDemo() {
 		int count = dao.insertDemo();

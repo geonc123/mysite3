@@ -1,7 +1,7 @@
 package com.javaex.controller;
 
 import java.util.List;
-
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.javaex.service.BoardService;
 import com.javaex.vo.BoardVo;
@@ -24,15 +25,10 @@ public class BoardController {
 	@RequestMapping(value = "/list/{pageno}", method = RequestMethod.GET)
 	public String list(Model model, @PathVariable("pageno") int pageno) {
 		System.out.println("get list");
-		int listSize = 10;
-		int pageno1 = 1+listSize*(pageno-1);
-		int pageno2 = listSize*pageno;
-		List<BoardVo> list = boardService.getList(pageno1, pageno2);
-		int countPage = boardService.countPage();
-		int maxPage = (int)Math.ceil((double)countPage/listSize);
-		System.out.println(countPage);
-		model.addAttribute("maxPage",maxPage);
-		model.addAttribute("geustList", list);
+		Map<String, Object> map = boardService.getList(pageno);
+		
+		model.addAttribute("maxPage", map.get("maxPage"));
+		model.addAttribute("guestList", map.get("list"));
 		return "board/list";
 
 	}
@@ -90,7 +86,14 @@ public class BoardController {
 		return"redirect:/board/list/1";
 	}
 	
-	
+@RequestMapping(value = "/search", method ={ RequestMethod.GET, RequestMethod.POST })
+	public String searchElse(@RequestParam("searchKwd") String searchKwd, Model model) {
+		List<BoardVo> list = boardService.searchList(searchKwd);
+		model.addAttribute("guestList", list);
+		
+		return"board/list";
+	}
+			
 	
 	
 	
