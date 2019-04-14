@@ -4,7 +4,7 @@
 <mapper namespace="board">
 
 	<select id="selectList" parameterType="map" resultType="com.javaex.vo.BoardVo"> 
-  <![CDATA[ select   B.rnum as rnum ,
+  	select   B.rnum as rnum ,
          B.no as no, 
          B.title as title,  
          B.content as content, 
@@ -13,31 +13,69 @@
          B.user_no as user_no, 
          B.name as name
 	from(
-    	select  rownum as rnum, 
-      	  	    A.no as no , 
-      	  	    A.title as title, 
-     	        A.content as content ,
-     	        A.hit as hit, 
-    	        A.reg_date as reg_date , 
-       		    A.user_no as user_no , 
-      	    	A.name as name
-    	from (
-    	        select	
-            		 g.no as no,
-                     g.title as title, 
-                     g.content as content, 
-                     g.hit as hit, 
-                     g.reg_date as reg_date, 
-                     g.user_no as user_no , 
-                     u.name as name 
-           from users u join geustbook g 
-            on u.no=g.user_no 
- 		 	order by g.no desc ) A
-   	  where rownum <=#{pageno2} ) B
+   		 select   rownum as rnum, 
+          		  A.no as no , 
+          		  A.title as title, 
+        	      A.content as content ,
+          		  A.hit as hit, 
+          		  A.reg_date as reg_date , 
+         	      A.user_no as user_no , 
+          		  A.name as name
+   		 from (
+				SELECT 	 g.no, 
+   					     g.title, 
+       					 g.content, 
+       					 g.hit, 
+       					 g.reg_date, 
+       					 g.user_no, 
+       					 u.name 
+				FROM geustbook g join users u
+				on u.no = g.user_no
+				order by g.no desc) A
+	<![CDATA[	
+	    where rownum <=#{pageno2} ) B
 	where B.rnum >= #{pageno1}
 	 ]]>
-
 	</select>
+	
+	<select id="searchList" parameterType="map" resultType="com.javaex.vo.BoardVo">
+		<![CDATA[
+	select   B.rnum as rnum ,
+         B.no as no, 
+         B.title as title,  
+         B.content as content, 
+         B.hit as hit , 
+         B.reg_date as reg_date , 
+         B.user_no as user_no, 
+         B.name as name
+	from(
+   		 select   rownum as rnum, 
+          		  A.no as no , 
+          		  A.title as title, 
+        	      A.content as content ,
+          		  A.hit as hit, 
+          		  A.reg_date as reg_date , 
+         	      A.user_no as user_no , 
+          		  A.name as name
+   		 from (
+				SELECT 	 g.no, 
+   					     g.title, 
+       					 g.content, 
+       					 g.hit, 
+       					 g.reg_date, 
+       					 g.user_no, 
+       					 u.name 
+				FROM geustbook g join users u
+				on u.no = g.user_no
+				 ]]>
+				<if test="searchKwd != null and searchKwd != '' " >
+				WHERE name LIKE #{searchKwd} or content LIKE #{searchKwd}
+				</if> order by g.no desc) A
+	<![CDATA[	
+	    where rownum <=#{pageno2} ) B
+	where B.rnum >= #{pageno1}
+	 ]]>
+	 </select>
 
 	<delete id="delete" parameterType="int">
 	<![CDATA[
@@ -76,10 +114,14 @@
 	</update>
 
 
-	<select id="count" resultType="int">
+	<select id="count" parameterType="String" resultType="int">
  		<![CDATA[	
  		select count(*) as count from geustbook 
- 		]]>
+ 		
+ 
+				WHERE content LIKE #{searchKwd}
+ ]]>
+ 
 	</select>
 
 
@@ -102,5 +144,7 @@
 
 ]]>
 	</select>
+
+
 
 </mapper>

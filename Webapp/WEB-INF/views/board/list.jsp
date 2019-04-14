@@ -30,7 +30,7 @@
 			<div id="c_box">
 				<div id="board">
 					<h2>게시판-리스트</h2>
-					<form action="${pageContext.request.contextPath}/board/search" method="post">
+					<form action="${pageContext.request.contextPath}/board/search/1" method="get">
 						<input type="text" id="kwd" name="searchKwd" value=""> <input type="submit" value="찾기">
 					</form>
 
@@ -57,12 +57,21 @@
 						</c:forEach>
 
 					</table>
+					<!--  start paging  -->
+					<c:choose>
+						<c:when test="${maxPage<pageno }">
+							<meta http-equiv="refresh" content="0; url=${pageContext.request.contextPath}/board/search/${maxPage }"></meta>
 
+						</c:when>
+						<c:when test="${pageno<0 }">
+							<meta http-equiv="refresh" content="0; url=${pageContext.request.contextPath}/board/search/1"></meta>
+						</c:when>
+						<c:otherwise>
 							<div class="pager">
 								<ul>
 									<li><c:choose>
 											<c:when test="${pageno>1}">
-												<a href="${pageContext.request.contextPath}/board/list/${pageno-1 }">◀</a>
+												<a href="${pageContext.request.contextPath}/board/search/${pageno-1 }?searchKwd=${param.searchKwd}"> ◀ </a>
 											</c:when>
 											<c:otherwise>
 
@@ -70,7 +79,7 @@
 										</c:choose></li>
 									<li><c:choose>
 											<c:when test="${pageno>3}">
-												<a href="${pageContext.request.contextPath}/board/list/${pageno-3 }">${pageno-3 }</a>
+												<a href="${pageContext.request.contextPath}/board/search/${pageno-3 }?searchKwd=${param.searchKwd}"> ${pageno-3 } </a>
 											</c:when>
 											<c:otherwise>
 
@@ -78,7 +87,7 @@
 										</c:choose></li>
 									<li><c:choose>
 											<c:when test="${pageno>2}">
-												<a href="${pageContext.request.contextPath}/board/list/${pageno-2 }">${pageno-2 }</a>
+												<a href="${pageContext.request.contextPath}/board/search/${pageno-2 }?searchKwd=${param.searchKwd}"> ${pageno-2 } </a>
 											</c:when>
 											<c:otherwise>
 
@@ -86,17 +95,17 @@
 										</c:choose></li>
 									<li><c:choose>
 											<c:when test="${pageno>1}">
-												<a href="${pageContext.request.contextPath}/board/list/${pageno-1 }">${pageno-1 }</a>
+												<a href="${pageContext.request.contextPath}/board/search/${pageno-1 }?searchKwd=${param.searchKwd}"> ${pageno-1 } </a>
 											</c:when>
 											<c:otherwise>
 
 											</c:otherwise>
 										</c:choose></li>
-									<li class="selected"><a href="${pageContext.request.contextPath}/board/list/${pageno }">${pageno }</a></li>
+									<li class="selected"><a href="${pageContext.request.contextPath}/board/search/${pageno }?searchKwd=${param.searchKwd}"> ${pageno } </a></li>
 
 									<li><c:choose>
 											<c:when test="${pageno+1<=maxPage}">
-												<a href="${pageContext.request.contextPath}/board/list/${pageno+1 }">${pageno+1 }</a>
+												<a href="${pageContext.request.contextPath}/board/search/${pageno+1 }?searchKwd=${param.searchKwd}"> ${pageno+1 } </a>
 											</c:when>
 											<c:otherwise>
 
@@ -104,7 +113,7 @@
 										</c:choose></li>
 									<li><c:choose>
 											<c:when test="${pageno+2<=maxPage}">
-												<a href="${pageContext.request.contextPath}/board/list/${pageno+2 }">${pageno+2 }</a>
+												<a href="${pageContext.request.contextPath}/board/list/${pageno+2 }?searchKwd=${param.searchKwd}"> ${pageno+2 } </a>
 											</c:when>
 											<c:otherwise>
 
@@ -112,7 +121,7 @@
 										</c:choose></li>
 									<li><c:choose>
 											<c:when test="${pageno+3<=maxPage}">
-												<a href="${pageContext.request.contextPath}/board/list/${pageno+3 }">${pageno+3 }</a>
+												<a href="${pageContext.request.contextPath}/board/search/${pageno+3 }?searchKwd=${param.searchKwd}"> ${pageno+3 } </a>
 											</c:when>
 											<c:otherwise>
 
@@ -120,7 +129,7 @@
 										</c:choose></li>
 									<li><c:choose>
 											<c:when test="${pageno+1<=maxPage}">
-												<a href="${pageContext.request.contextPath}/board/list/${pageno+1 }">▶</a>
+												<a href="${pageContext.request.contextPath}/board/search/${pageno+1 }?searchKwd=${param.searchKwd}"> ▶ </a>
 											</c:when>
 											<c:otherwise>
 
@@ -129,6 +138,11 @@
 
 								</ul>
 							</div>
+						</c:otherwise>
+					</c:choose>
+
+					<!-- end paging -->
+
 					<div class="pager"></div>
 					<div class="bottom">
 						<c:if test="${sessionScope.authUser != null }">

@@ -60,8 +60,8 @@ public class BoardDao {
 		return boardVo;
 	}
 	
-	public int count(){
-		int count= sqlsession.selectOne("board.count");
+	public int count(String searchKwd){
+		int count= sqlsession.selectOne("board.count", searchKwd);
 		return count ;
 	}
 	public int insertDemo() {
@@ -79,9 +79,16 @@ public class BoardDao {
 		 return count;
 		}
 	
-	public List<BoardVo> search(String searchKwd) {
-		List<BoardVo> list = sqlsession.selectList("board.search",searchKwd);
+	public List<BoardVo> search(String searchKwd, int pageno1, int pageno2) {
+		Map<String, Object> pageMap = new HashMap<String, Object>();
+		pageMap.put("searchKwd", searchKwd);
+		pageMap.put("pageno1", pageno1);
+		pageMap.put("pageno2", pageno2);
+		
+		List<BoardVo> list = sqlsession.selectList("board.searchList", pageMap);
 		return list;
 	}
+	
+	
 	 
 }

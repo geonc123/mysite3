@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rboard">
+
+
+
+
+	<!-- configuration 에 넣자 ! -->
+
+
+<select id="selectList" resultType="com.javaex.vo.RboardVo">
+	<![CDATA[
+ 			 select  
+  					no ,
+ 					user_no ,
+ 					title ,
+ 					content ,
+ 					hit,
+ 					reg_date ,
+ 					group_no,
+ 					order_no,
+ 					depth,
+ 					statement
+ 			 from rboard
+             order by group_no desc , order_no 
+ 		 ]]>
+	</select>
+	
+	
+	<select id="selectOne" parameterType="int" resultType="com.javaex.vo.RboardVo">
+	<![CDATA[
+		 select  
+  					no ,
+ 					user_no ,
+ 					title ,
+ 					content ,
+ 					hit,
+ 					reg_date ,
+ 					group_no,
+ 					order_no,
+ 					depth,
+ 					statement
+ 			 from rboard
+           where no = #{no}
+            ]]>
+	</select>
+
+
+	<update id="group_no" parameterType="int">
+ 	<![CDATA[	
+ 	update rboard set group_no = group_no+1 where no =#{no}
+ 	]]>
+	</update>
+
+
+	<update id="upHit" parameterType="int">
+ 	<![CDATA[	
+ 	update rboard set hit = hit+1 where no=#{no}
+ 	]]>
+	</update>
+
+	<!-- 중간에 하나가 더 생기면 if 로 같은 group_no 뒤에 있는 order_no 들을 다 업 시켜 줘 버리자 -->
+	<update id="oder_no" parameterType="int">
+  	<![CDATA[	
+  	update rboard set order_no  = order_no+1 where no=#{no} 
+ 	 ]]>
+	</update>
+
+	<update id="depth" parameterType="int">
+	<![CDATA[	
+	update rboard set depth  = depth+1 where no=#{no} 
+	]]>
+	</update>
+
+
+	<update id="title" parameterType="map">
+	<![CDATA[	
+	 update rboard set title = #{title} where no=#{no} 
+	]]>
+	</update>
+	<update id="content" parameterType="map">
+	<![CDATA[	
+	 update rboard set content  = #{content} where no=#{no} 
+	]]>
+	</update>
+	<update id="hit" parameterType="int">
+	<![CDATA[	
+	 update rboard set hit  = 1 where no=#{no} 
+	]]>
+	</update>
+
+
+	<select id="count" parameterType="int" resultType="int">
+ 	<![CDATA[
+ 		select count(*) from rboard where group_no = #{group_no}
+ 	]]>
+	</select>
+
+	<update id="updateIn_InwriteOrder_no" parameterType="map">
+ 	<![CDATA[
+ 		update rboard set order_no = order_no+1
+ 		where group_no = #{group_no} 
+  		and order_no between #{order_no_1} and #{order_no_2}
+ 	]]>
+	</update>
+
+	<insert id="insert" parameterType="com.javaex.vo.RboardVo">
+ 	<![CDATA[	
+ 	insert into rboard values(
+ 							seq_rboard_no.nextval,  
+                            #{user_no}, 
+                            #{title}, 
+                            #{content} , 
+                            1, 
+                            to_char(sysdate,'yyyy/mm/dd hh24:mi:ss'), 
+                            seq_group_no.nextval,
+                            1,
+                            0,
+                            'alive'
+                            )
+     ]]>
+	</insert>
+	<insert id="ininsert" parameterType="com.javaex.vo.RboardVo">
+ 	<![CDATA[	
+ 	insert into rboard values(
+ 							seq_rboard_no.nextval,  
+                            #{user_no}, 
+                            #{title}, 
+                            #{content} , 
+                            1, 
+                            to_char(sysdate,'yyyy/mm/dd hh24:mi:ss'), 
+                            #{group_no},
+                            #{order_no},
+                            1,
+                            'alive'
+                            )
+     ]]>
+	</insert>
+	<insert id="in_ininsert" parameterType="com.javaex.vo.RboardVo">
+ 	<![CDATA[	
+ 	insert into rboard values(
+ 							seq_rboard_no.nextval,  
+                            #{user_no}, 
+                            #{title}, 
+                            #{content} , 
+                            1, 
+                            to_char(sysdate,'yyyy/mm/dd hh24:mi:ss'), 
+                            #{group_no},
+                            #{order_no},
+                            #{depth},
+                            'alive'
+                            )
+     ]]>
+	</insert>
+	
+	
+		<update id="deadpoint" parameterType="int">
+	<![CDATA[	
+	
+	update rboard SET statement = 'deadpoint' where no = #{no} 
+	]]>
+	</update>
+	
+	
+</mapper>

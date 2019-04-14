@@ -11,7 +11,8 @@
 	<ul>
 		<li><a href="${pageContext.request.contextPath}/main">황일영</a></li>
 		<li><a href="${pageContext.request.contextPath}/guestbook/addList">방명록</a></li>
-		<li><a href="${pageContext.request.contextPath}/board/list/1">게시판</a></li>
+		<li><a href="${pageContext.request.contextPath}/board/search/1">게시판</a></li>
+		<li><a href="${pageContext.request.contextPath}/rboard/list">rboard</a></li>
 	</ul>
 </body>
 </html>
