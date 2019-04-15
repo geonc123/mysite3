@@ -163,4 +163,20 @@
 	</update>
 	
 	
+	
+	
+		<update id="modify" parameterType="com.javaex.vo.RboardVo">
+	<![CDATA[	
+	
+	UPDATE rboard set 
+                content = #{content},
+                title = '#{title} 
+                where no = #{no}
+                
+	]]>
+	</update>
+	
+
+	
+	
 </mapper>

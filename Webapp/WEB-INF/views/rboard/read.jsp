@@ -51,7 +51,7 @@
 					<div class="bottom">
 						<a href="${pageContext.request.contextPath}/rboard/list">글목록</a>
 						<c:if test="${getList.user_no == sessionScope.authUser.no}">
-							<a href="${pageContext.request.contextPath}">글수정</a>
+							<a href="${pageContext.request.contextPath}/rboard/modifyform?no=${getList.no}">글수정</a>
 						</c:if>
 					</div>
 

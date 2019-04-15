@@ -88,5 +88,17 @@ public class RboardController {
 		return "rboard/read";
 	}
 	
+	@RequestMapping(value = "modifyform", method = RequestMethod.GET)
+	public String modifyForm(@RequestParam("no") int no ) {
+		
+		return "rboard/modifyform" ;
+	}
 	
+	
+	@RequestMapping(value = "modify", method = RequestMethod.POST)
+	public String modify(@ModelAttribute RboardVo rboardVo) {
+		rboardService.modify(rboardVo);
+		return "redirect:/rboard/list";
+	}
+
 }

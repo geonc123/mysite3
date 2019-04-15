@@ -73,4 +73,9 @@ public class RboardService {
 		RboardVo rboardVo = dao.selectOnt(no);
 		return rboardVo;
 	}
+	
+	public int modify(RboardVo rboardVo) {
+		int count = dao.modify(rboardVo);
+		return count;
+	}
 }

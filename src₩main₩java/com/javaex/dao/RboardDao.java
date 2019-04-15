@@ -108,4 +108,9 @@ public class RboardDao {
 		RboardVo rboardVo = sqlsession.selectOne("rboard.selectOne", no);
 		return rboardVo;
 	}
+	
+	public int modify(RboardVo rboardVo) {
+		int count = sqlsession.update("rboard.modify", rboardVo);
+		return count;
+	}
 }
